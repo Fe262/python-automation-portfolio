@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block titulo %}Agende seu horário{% endblock %}
+{% block conteudo %}
+<h1>Agende seu horário</h1>
+
+{# Passo 1 e 2: escolher servico e dia (a pagina recarrega mostrando os horarios livres) #}
+<form method="get" class="cartao">
+  <label>1. Serviço
+    <select name="servico" required onchange="this.form.submit()">
+      <option value="">Escolha…</option>
+      {% for s in servicos %}
+        <option value="{{ s.id }}" {{ 'selected' if servico and servico.id == s.id }}>
+          {{ s.nome }} · {{ s.duracao_min }} min · {{ reais(s.preco) }}
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>2. Dia
+    <input type="date" name="dia" required min="{{ hoje }}" max="{{ limite }}"
+           value="{{ dia or '' }}" onchange="this.form.submit()">
+  </label>
+  <noscript><button>Ver horários</button></noscript>
+</form>
+
+{% if servico and dia %}
+  {% if horarios %}
+    {# Passo 3: escolher horario e informar nome/telefone #}
+    <form method="post" action="{{ url_for('agendar') }}" class="cartao">
+      <input type="hidden" name="csrf" value="{{ csrf() }}">
+      <input type="hidden" name="servico" value="{{ servico.id }}">
+      <fieldset>
+        <legend>3. Horário em {{ dia.strftime('%d/%m/%Y') }}</legend>
+        <div class="horarios">
+          {% for h in horarios %}
+            <label class="horario">
+              <input type="radio" name="inicio" value="{{ h.strftime('%Y-%m-%dT%H:%M') }}" required>
+              <span>{{ h.strftime('%H:%M') }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+      <label>4. Seu nome <input name="nome" required minlength="3" autocomplete="name"></label>
+      <label>WhatsApp / telefone
+        <input name="telefone" required placeholder="(11) 91234-5678" inputmode="tel" autocomplete="tel">
+      </label>
+      <button class="principal">Confirmar agendamento</button>
+    </form>
+  {% else %}
+    <p class="aviso">Não há horários livres nesse dia. Tente outra data.</p>
+  {% endif %}
+{% endif %}
+
+<p class="rodape"><a href="{{ url_for('login') }}">Área do estabelecimento</a></p>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block titulo %}Agenda{% endblock %}
+{% block conteudo %}
+<div class="navega-dia">
+  <a class="botao" href="{{ url_for('painel', dia=anterior) }}">‹</a>
+  <form method="get"><input type="date" name="dia" value="{{ dia }}" onchange="this.form.submit()"></form>
+  <a class="botao" href="{{ url_for('painel', dia=seguinte) }}">›</a>
+</div>
+
+<div class="numeros">
+  <div><span>{{ qtd }}</span>atendimentos</div>
+  <div><span>{{ reais(total) }}</span>previsto no dia</div>
+</div>
+
+{% if agenda %}
+  <ul class="agenda">
+    {% for a in agenda %}
+      <li class="{{ a.status }}">
+        <div>
+          <strong>{{ a.inicio[11:] }}–{{ a.fim[11:] }}</strong> · {{ a.servico }}<br>
+          {{ a.cliente }} · <a href="https://wa.me/55{{ a.telefone | replace('(', '') | replace(')', '') | replace(' ', '') | replace('-', '') }}" target="_blank" rel="noopener">{{ a.telefone }}</a>
+          <small class="etiqueta">{{ a.status }}</small>
+        </div>
+        <div class="acoes">
+          {% for valor, texto in [('concluido', 'Concluir'), ('cancelado', 'Cancelar'), ('marcado', 'Reabrir')] if valor != a.status %}
+            <form method="post" action="{{ url_for('status', agendamento_id=a.id) }}">
+              <input type="hidden" name="csrf" value="{{ csrf() }}">
+              <input type="hidden" name="status" value="{{ valor }}">
+              <button>{{ texto }}</button>
+            </form>
+          {% endfor %}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="aviso">Nenhum agendamento em {{ dia.strftime('%d/%m/%Y') }}.</p>
+{% endif %}
+{% endblock %}

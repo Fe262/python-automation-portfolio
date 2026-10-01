@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block titulo %}Agendamento confirmado{% endblock %}
+{% block conteudo %}
+<div class="cartao confirmado">
+  <h1>✅ Agendado!</h1>
+  <p><strong>{{ ag.servico }}</strong> · {{ reais(ag.preco) }}</p>
+  <p class="destaque">{{ inicio.strftime('%d/%m/%Y') }} às {{ inicio.strftime('%H:%M') }}</p>
+  <p>Em nome de <strong>{{ ag.cliente }}</strong> · {{ ag.telefone }}</p>
+  <p class="nota">Tire um print desta tela. Para cancelar, fale com o estabelecimento.</p>
+  <a class="botao" href="{{ url_for('inicio') }}">Fazer outro agendamento</a>
+</div>
+{% endblock %}

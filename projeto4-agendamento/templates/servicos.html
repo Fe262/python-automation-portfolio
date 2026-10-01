@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block titulo %}Serviços{% endblock %}
+{% block conteudo %}
+<h1>Serviços</h1>
+<ul class="agenda">
+  {% for s in servicos %}
+    <li class="{{ '' if s.ativo else 'cancelado' }}">
+      <div><strong>{{ s.nome }}</strong> · {{ s.duracao_min }} min · {{ reais(s.preco) }}
+        {% if not s.ativo %}<small class="etiqueta">desativado</small>{% endif %}</div>
+      <form method="post" action="{{ url_for('alternar', servico_id=s.id) }}" class="acoes">
+        <input type="hidden" name="csrf" value="{{ csrf() }}">
+        <button>{{ 'Desativar' if s.ativo else 'Ativar' }}</button>
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+
+<form method="post" class="cartao">
+  <h2>Novo serviço</h2>
+  <input type="hidden" name="csrf" value="{{ csrf() }}">
+  <label>Nome <input name="nome" required minlength="2"></label>
+  <label>Duração
+    <select name="duracao">
+      {% for m in [30, 60, 90, 120, 180, 240] %}<option value="{{ m }}">{{ m }} min</option>{% endfor %}
+    </select>
+  </label>
+  <label>Preço (R$) <input name="preco" required inputmode="decimal" placeholder="50,00"></label>
+  <button class="principal">Cadastrar</button>
+</form>
+{% endblock %}

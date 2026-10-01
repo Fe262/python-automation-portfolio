@@ -21,3 +21,7 @@ projeto3-formulario/dados/
 # Central de trabalho (dados de clientes e pagamentos: privado)
 trabalho/
 Central Freelancer.bat
+
+# Bancos de dados (dados reais de clientes)
+*.db
+.pytest_cache/
