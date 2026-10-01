@@ -24,6 +24,10 @@ jobs:
         working-directory: projeto4-agendamento
         run: python -m pytest -v
 
+      - name: Projeto 6 - testes da conciliacao de planilhas
+        working-directory: projeto6-conciliacao
+        run: python -m pytest -v
+
       - name: Projeto 1 - gera o relatorio com os dados de exemplo
         working-directory: projeto1-relatorio-planilha
         run: |
