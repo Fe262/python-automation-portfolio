@@ -111,7 +111,7 @@ with aba_painel:
         filtro = st.multiselect("Filtrar por servico", SERVICOS, placeholder="Todos os servicos")
         if filtro:
             pedidos = pedidos[pedidos["Servico"].isin(filtro)]
-        st.dataframe(pedidos, use_container_width=True, hide_index=True)
+        st.dataframe(pedidos, width="stretch", hide_index=True)
 
         # Botao para baixar a planilha (ja filtrada)
         arquivo = BytesIO()

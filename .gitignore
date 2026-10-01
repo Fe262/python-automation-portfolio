@@ -17,3 +17,7 @@ CLAUDE.md
 # Pedidos reais do formulario (dados de clientes)
 projeto3-formulario/dados/
 .claude/
+
+# Central de trabalho (dados de clientes e pagamentos: privado)
+trabalho/
+Central Freelancer.bat
