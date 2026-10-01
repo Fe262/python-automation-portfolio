@@ -1,0 +1,15 @@
+# Ambiente Python (nao vai para o GitHub)
+.venv/
+__pycache__/
+*.pyc
+
+# Chaves e senhas: NUNCA vao para o GitHub
+.env
+
+# Arquivos gerados pelos scripts
+saida/
+
+# Anotacoes pessoais (nao publicar)
+upwork-perfil.md
+CLAUDE.md
+.vscode/
