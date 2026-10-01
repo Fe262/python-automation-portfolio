@@ -10,9 +10,11 @@ click==8.5.0
 contourpy==1.4.0
 cryptography==50.0.2
 cycler==0.12.1
+defusedxml==0.7.1
 docstring_parser==0.18.0
 et_xmlfile==2.0.0
 fonttools==4.66.1
+fpdf2==2.8.9
 h11==0.16.0
 httpcore2==2.13.1
 httptools==0.8.0

@@ -13,3 +13,7 @@ saida/
 upwork-perfil.md
 CLAUDE.md
 .vscode/
+
+# Pedidos reais do formulario (dados de clientes)
+projeto3-formulario/dados/
+.claude/
