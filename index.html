@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Felipe Ferrari · Apps web e automações em Python</title>
+  <meta name="description" content="Desenvolvedor Python: apps web, sistemas de agendamento, formulários, painéis e automação de Excel e PDF.">
+  <meta property="og:title" content="Felipe Ferrari · Apps web e automações em Python">
+  <meta property="og:description" content="Apps web, painéis e automações que economizam horas de trabalho manual.">
+  <meta property="og:image" content="projeto4-agendamento/imagens/painel.jpg">
+  <style>
+    :root {
+      --fundo: #fafaf8; --cartao: #ffffff; --texto: #16181d; --suave: #5f6670; --borda: #e7e5df;
+      --cor: #0f766e; --cor-clara: #e6f4f1;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --fundo: #0e1116; --cartao: #161b22; --texto: #e6edf3; --suave: #9aa4af; --borda: #262d36;
+              --cor: #2dd4bf; --cor-clara: #12302c; }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--fundo); color: var(--texto); line-height: 1.6;
+           font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    a { color: var(--cor); }
+    .largura { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+    nav { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--fundo) 88%, transparent);
+          backdrop-filter: blur(8px); border-bottom: 1px solid var(--borda); }
+    nav .largura { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
+    .logo { font-weight: 800; text-decoration: none; color: var(--texto); }
+    .menu { display: flex; gap: 18px; align-items: center; font-size: .95rem; }
+    .menu a { color: var(--suave); text-decoration: none; }
+    .menu a:hover { color: var(--texto); }
+    .idioma { border: 1px solid var(--borda); background: var(--cartao); color: var(--texto); border-radius: 99px;
+              padding: 4px 12px; font: inherit; font-size: .85rem; cursor: pointer; }
+    @media (max-width: 640px) { .menu a { display: none; } }
+
+    .hero { padding: 72px 0 48px; }
+    .selo { display: inline-block; background: var(--cor-clara); color: var(--cor); font-weight: 600; font-size: .85rem;
+            padding: 4px 12px; border-radius: 99px; }
+    h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin: 16px 0; letter-spacing: -.02em; max-width: 820px; }
+    .hero p { color: var(--suave); font-size: 1.15rem; max-width: 680px; margin: 0 0 28px; }
+    .botoes { display: flex; gap: 12px; flex-wrap: wrap; }
+    .botao { display: inline-block; padding: 12px 22px; border-radius: 12px; font-weight: 700; text-decoration: none;
+             border: 1px solid var(--borda); color: var(--texto); background: var(--cartao); }
+    .botao.principal { background: var(--cor); border-color: var(--cor); color: #fff; }
+    @media (prefers-color-scheme: dark) { .botao.principal { color: #06201d; } }
+
+    section { padding: 48px 0; }
+    h2 { font-size: 1.7rem; margin: 0 0 8px; letter-spacing: -.01em; }
+    .sub { color: var(--suave); margin: 0 0 28px; }
+
+    .grade { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+    .servico { background: var(--cartao); border: 1px solid var(--borda); border-radius: 16px; padding: 20px; }
+    .servico .icone { font-size: 1.6rem; }
+    .servico h3 { margin: 8px 0 6px; font-size: 1.05rem; }
+    .servico p { margin: 0; color: var(--suave); font-size: .95rem; }
+
+    .projeto { display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: center; background: var(--cartao);
+               border: 1px solid var(--borda); border-radius: 20px; padding: 24px; margin-bottom: 20px; }
+    .projeto img { width: 100%; border-radius: 12px; border: 1px solid var(--borda); display: block; background: #fff; }
+    .projeto h3 { margin: 0 0 8px; font-size: 1.3rem; }
+    .projeto p { color: var(--suave); margin: 0 0 12px; }
+    .projeto ul { margin: 0 0 14px; padding-left: 18px; color: var(--suave); }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .tags span { font-size: .8rem; padding: 2px 10px; border-radius: 99px; background: var(--cor-clara); color: var(--cor); font-weight: 600; }
+    .destaque { border: 2px solid var(--cor); }
+    @media (max-width: 760px) { .projeto { grid-template-columns: 1fr; } }
+
+    .passos { counter-reset: passo; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .passo { background: var(--cartao); border: 1px solid var(--borda); border-radius: 16px; padding: 20px; }
+    .passo::before { counter-increment: passo; content: counter(passo); display: inline-grid; place-items: center;
+                     width: 30px; height: 30px; border-radius: 50%; background: var(--cor); color: #fff; font-weight: 800; }
+    .passo h3 { margin: 10px 0 4px; font-size: 1rem; }
+    .passo p { margin: 0; color: var(--suave); font-size: .95rem; }
+
+    .contato { text-align: center; background: var(--cartao); border: 1px solid var(--borda); border-radius: 20px; padding: 40px 20px; }
+    footer { color: var(--suave); text-align: center; font-size: .85rem; padding: 32px 0 48px; }
+
+    [data-en] { display: none; }
+    html[lang="en"] [data-pt] { display: none; }
+    html[lang="en"] [data-en] { display: revert; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="largura">
+      <a class="logo" href="#">Felipe Ferrari</a>
+      <div class="menu">
+        <a href="#servicos"><span data-pt>Serviços</span><span data-en>Services</span></a>
+        <a href="#projetos"><span data-pt>Projetos</span><span data-en>Projects</span></a>
+        <a href="#como"><span data-pt>Como trabalho</span><span data-en>How I work</span></a>
+        <button class="idioma" id="idioma" aria-label="Mudar idioma / Change language">EN</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="largura">
+      <span class="selo"><span data-pt>Desenvolvedor Python · Disponível para projetos</span><span data-en>Python Developer · Available for projects</span></span>
+      <h1>
+        <span data-pt>Apps web e automações que tiram o trabalho manual do seu dia.</span>
+        <span data-en>Web apps and automations that take manual work off your plate.</span>
+      </h1>
+      <p>
+        <span data-pt>Sistemas de agendamento, formulários, painéis e automação de planilhas e PDFs, com preço fixo, entregas por etapa e tudo testado antes de chegar até você.</span>
+        <span data-en>Booking systems, forms, dashboards and spreadsheet/PDF automation, with fixed prices, milestone deliveries and everything tested before it reaches you.</span>
+      </p>
+      <div class="botoes">
+        <a class="botao principal" href="#projetos"><span data-pt>Ver projetos</span><span data-en>See projects</span></a>
+        <a class="botao" href="https://github.com/Fe262/python-automation-portfolio"><span data-pt>Código no GitHub</span><span data-en>Code on GitHub</span></a>
+      </div>
+    </div>
+  </header>
+
+  <section id="servicos">
+    <div class="largura">
+      <h2><span data-pt>O que eu faço</span><span data-en>What I build</span></h2>
+      <p class="sub"><span data-pt>Soluções pequenas e certeiras, para pequenas empresas e profissionais.</span><span data-en>Focused solutions for small businesses and professionals.</span></p>
+      <div class="grade">
+        <div class="servico"><div class="icone">📅</div>
+          <h3><span data-pt>Apps web</span><span data-en>Web apps</span></h3>
+          <p><span data-pt>Agendamento online, cadastros, áreas com login e painéis de gestão, com banco de dados.</span><span data-en>Online booking, records, login areas and management dashboards, with a database.</span></p></div>
+        <div class="servico"><div class="icone">📝</div>
+          <h3><span data-pt>Formulários e painéis</span><span data-en>Forms & dashboards</span></h3>
+          <p><span data-pt>Formulários que validam os dados e salvam tudo numa planilha, com painel para consultar.</span><span data-en>Forms that validate input and save to a spreadsheet, with a dashboard to browse it.</span></p></div>
+        <div class="servico"><div class="icone">📊</div>
+          <h3><span data-pt>Automação de Excel</span><span data-en>Excel automation</span></h3>
+          <p><span data-pt>Relatórios, gráficos e limpeza de dados em um clique, no lugar de horas de copiar e colar.</span><span data-en>Reports, charts and data cleaning in one click instead of hours of copy-paste.</span></p></div>
+        <div class="servico"><div class="icone">📄</div>
+          <h3><span data-pt>Extração de PDF</span><span data-en>PDF extraction</span></h3>
+          <p><span data-pt>Lê notas, recibos e formulários em PDF e organiza os dados numa planilha.</span><span data-en>Reads invoices, receipts and forms in PDF and organizes the data in a spreadsheet.</span></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projetos">
+    <div class="largura">
+      <h2><span data-pt>Projetos</span><span data-en>Projects</span></h2>
+      <p class="sub"><span data-pt>Todos funcionando, com código aberto e dados de exemplo inventados.</span><span data-en>All working, open source, with fake sample data.</span></p>
+
+      <article class="projeto destaque">
+        <img src="projeto4-agendamento/imagens/painel.jpg" alt="Painel do app de agendamento" loading="lazy">
+        <div>
+          <h3>Agenda Fácil</h3>
+          <p><span data-pt>App web de agendamento para barbearias, salões e clínicas: o cliente marca pelo celular e o dono gerencia tudo num painel com senha.</span><span data-en>Booking web app for barbershops, salons and clinics: customers book from their phone, the owner manages everything in a password-protected dashboard.</span></p>
+          <ul>
+            <li><span data-pt>Só mostra horários realmente livres; impossível marcar dois no mesmo horário</span><span data-en>Shows only truly free slots; double booking is impossible</span></li>
+            <li><span data-pt>Agenda do dia, faturamento previsto, WhatsApp do cliente com um toque</span><span data-en>Daily agenda, expected revenue, one-tap WhatsApp to customers</span></li>
+            <li><span data-pt>15 testes automáticos e proteções de segurança</span><span data-en>15 automated tests and security protections</span></li>
+          </ul>
+          <div class="tags"><span>Python</span><span>Flask</span><span>SQLite</span><span>pytest</span></div>
+          <a href="https://github.com/Fe262/python-automation-portfolio/tree/main/projeto4-agendamento"><span data-pt>Ver código e detalhes →</span><span data-en>See code and details →</span></a>
+        </div>
+      </article>
+
+      <article class="projeto">
+        <img src="projeto3-formulario/imagens/painel.jpg" alt="Painel de pedidos de orçamento" loading="lazy">
+        <div>
+          <h3><span data-pt>Formulário de orçamento → Excel</span><span data-en>Quote Request Form → Excel</span></h3>
+          <p><span data-pt>Formulário web que confere os dados do cliente, salva cada pedido numa planilha e mostra um painel com filtro e download.</span><span data-en>Web form that validates customer data, saves each request to a spreadsheet and shows a dashboard with filters and download.</span></p>
+          <div class="tags"><span>Python</span><span>Streamlit</span><span>pandas</span></div>
+          <a href="https://github.com/Fe262/python-automation-portfolio/tree/main/projeto3-formulario"><span data-pt>Ver código e detalhes →</span><span data-en>See code and details →</span></a>
+        </div>
+      </article>
+
+      <article class="projeto">
+        <img src="projeto1-relatorio-planilha/imagens/grafico_mensal.png" alt="Gráfico de faturamento mensal" loading="lazy">
+        <div>
+          <h3><span data-pt>Relatório automático de vendas</span><span data-en>Automatic Sales Report</span></h3>
+          <p><span data-pt>Transforma uma planilha de vendas bruta num relatório formatado, com totais por mês, produto e vendedor e um gráfico, em um comando.</span><span data-en>Turns a raw sales sheet into a formatted report with totals by month, product and salesperson plus a chart, in one command.</span></p>
+          <div class="tags"><span>Python</span><span>pandas</span><span>openpyxl</span><span>matplotlib</span></div>
+          <a href="https://github.com/Fe262/python-automation-portfolio/tree/main/projeto1-relatorio-planilha"><span data-pt>Ver código e detalhes →</span><span data-en>See code and details →</span></a>
+        </div>
+      </article>
+
+      <article class="projeto">
+        <img src="projeto2-extrator-pdf/imagens/resultado.png" alt="Planilha gerada a partir de PDFs" loading="lazy">
+        <div>
+          <h3><span data-pt>Extrator de dados de PDF</span><span data-en>PDF Invoice Data Extractor</span></h3>
+          <p><span data-pt>Lê uma pasta de notas em PDF e monta uma planilha com número, data, cliente, CNPJ e valor, destacando o que precisa de conferência.</span><span data-en>Reads a folder of PDF invoices and builds a spreadsheet with number, date, client, tax ID and amount, flagging anything that needs checking.</span></p>
+          <div class="tags"><span>Python</span><span>pdfplumber</span><span>regex</span><span>Excel</span></div>
+          <a href="https://github.com/Fe262/python-automation-portfolio/tree/main/projeto2-extrator-pdf"><span data-pt>Ver código e detalhes →</span><span data-en>See code and details →</span></a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="como">
+    <div class="largura">
+      <h2><span data-pt>Como eu trabalho</span><span data-en>How I work</span></h2>
+      <p class="sub"><span data-pt>Sem surpresas: você sabe o que recebe, quando e por quanto.</span><span data-en>No surprises: you know what you get, when, and for how much.</span></p>
+      <div class="passos">
+        <div class="passo"><h3><span data-pt>Entendo e confirmo</span><span data-en>I understand and confirm</span></h3>
+          <p><span data-pt>Repito o pedido com minhas palavras e combinamos o que significa "pronto".</span><span data-en>I restate the task in my own words and we agree on what "done" means.</span></p></div>
+        <div class="passo"><h3><span data-pt>Preço fixo por etapas</span><span data-en>Fixed-price milestones</span></h3>
+          <p><span data-pt>Cada etapa tem entrega, valor e critério claros. Nada de cobrança por hora sem fim.</span><span data-en>Each milestone has a clear deliverable, price and acceptance criteria.</span></p></div>
+        <div class="passo"><h3><span data-pt>Atualização diária</span><span data-en>Daily updates</span></h3>
+          <p><span data-pt>Uma mensagem curta por dia: o que foi feito, o que vem e se preciso de algo.</span><span data-en>A short message every day: what's done, what's next, and if I need anything.</span></p></div>
+        <div class="passo"><h3><span data-pt>Testado e explicado</span><span data-en>Tested and explained</span></h3>
+          <p><span data-pt>Testo com seus dados reais e com dados "ruins", e explico como usar.</span><span data-en>I test with your real data and with "bad" data, and explain how to use it.</span></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="largura">
+      <div class="contato">
+        <h2><span data-pt>Tem uma tarefa que toma horas toda semana?</span><span data-en>Got a task that eats hours every week?</span></h2>
+        <p class="sub"><span data-pt>Me conte pela plataforma onde você me encontrou. Normalmente respondo com uma pequena demonstração do seu caso.</span><span data-en>Tell me through the platform where you found me. I usually reply with a small demo of your case.</span></p>
+        <a class="botao principal" href="https://github.com/Fe262"><span data-pt>Meu GitHub</span><span data-en>My GitHub</span></a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span data-pt>Felipe Ferrari · Desenvolvedor Python · Brasil</span><span data-en>Felipe Ferrari · Python Developer · Brazil</span>
+  </footer>
+
+  <script>
+    // Troca PT <-> EN e lembra a escolha (abre em ingles automaticamente com ?lang=en)
+    const raiz = document.documentElement, botao = document.getElementById("idioma");
+    const aplicar = (lang) => { raiz.lang = lang === "en" ? "en" : "pt-BR"; botao.textContent = lang === "en" ? "PT" : "EN"; };
+    let inicial = new URLSearchParams(location.search).get("lang");
+    try { inicial = inicial || localStorage.getItem("idioma"); } catch (e) {}
+    aplicar(inicial || "pt");
+    botao.addEventListener("click", () => {
+      const novo = raiz.lang === "en" ? "pt" : "en";
+      aplicar(novo);
+      try { localStorage.setItem("idioma", novo); } catch (e) {}
+    });
+  </script>
+</body>
+</html>

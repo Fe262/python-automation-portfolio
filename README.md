@@ -1,5 +1,8 @@
 # Python Automation Portfolio
 
+[![Testes](https://github.com/Fe262/python-automation-portfolio/actions/workflows/testes.yml/badge.svg)](https://github.com/Fe262/python-automation-portfolio/actions/workflows/testes.yml)
+**🌐 Portfolio site:** https://fe262.github.io/python-automation-portfolio/
+
 Web apps and practical automations for real business tasks: online booking, forms, dashboards, spreadsheets and PDFs.
 
 | Project | What it does |

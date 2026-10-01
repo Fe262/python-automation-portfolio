@@ -25,3 +25,6 @@ Central Freelancer.bat
 # Bancos de dados (dados reais de clientes)
 *.db
 .pytest_cache/
+
+# Projeto pessoal, fora do portfolio publico
+projeto5-analise-facial/

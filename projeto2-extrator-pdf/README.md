@@ -13,12 +13,7 @@ Runs 100% on your computer: no files are uploaded anywhere.
 
 ## Example output
 
-| Arquivo | Numero | Data | Cliente | CNPJ | Valor Total | Status |
-|---|---|---|---|---|---|---|
-| nota_1001.pdf | 1001 | 23/03/2026 | Clinica Sorriso Feliz Ltda | 34.567.890/0001-12 | R$ 450,00 | OK |
-| nota_1006.pdf | 1006 | 29/04/2026 | Padaria Pao Quente Ltda | 12.345.678/0001-90 | R$ 900,00 | OK |
-| broken.pdf | | | | | | ERRO ao abrir |
-| incomplete.pdf | 2000 | | | | | CONFERIR: falta Data, Cliente, CNPJ, Valor Total |
+![Extracted spreadsheet](imagens/resultado.png)
 
 ## How to use
 
