@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Felipe Ferrari · Apps web e automações em Python</title>
-  <meta name="description" content="Desenvolvedor Python: apps web, sistemas de agendamento, formulários, painéis e automação de Excel e PDF.">
+  <meta name="description" content="Desenvolvedor Python: apps web, otimização de escalas, cobrança por assinatura com Stripe, conciliação de planilhas e extração de PDF.">
   <meta property="og:title" content="Felipe Ferrari · Apps web e automações em Python">
   <meta property="og:description" content="Apps web, painéis e automações que economizam horas de trabalho manual.">
   <meta property="og:image" content="projeto4-agendamento/imagens/painel.jpg">
@@ -103,8 +103,8 @@
         <span data-en>Web apps and automations that take manual work off your plate.</span>
       </h1>
       <p>
-        <span data-pt>Sistemas de agendamento, formulários, painéis e automação de planilhas e PDFs, com preço fixo, entregas por etapa e tudo testado antes de chegar até você.</span>
-        <span data-en>Booking systems, forms, dashboards and spreadsheet/PDF automation, with fixed prices, milestone deliveries and everything tested before it reaches you.</span>
+        <span data-pt>Apps de agendamento, otimização de escalas, cobrança por assinatura (Stripe) e automação de planilhas e PDFs, com preço fixo, entregas por etapa e tudo testado antes de chegar até você.</span>
+        <span data-en>Booking apps, shift optimization, subscription billing (Stripe) and spreadsheet/PDF automation, with fixed prices, milestone deliveries and everything tested before it reaches you.</span>
       </p>
       <div class="botoes">
         <a class="botao principal" href="#projetos"><span data-pt>Ver projetos</span><span data-en>See projects</span></a>
@@ -121,12 +121,12 @@
         <div class="servico"><div class="icone">📅</div>
           <h3><span data-pt>Apps web</span><span data-en>Web apps</span></h3>
           <p><span data-pt>Agendamento online, cadastros, áreas com login e painéis de gestão, com banco de dados.</span><span data-en>Online booking, records, login areas and management dashboards, with a database.</span></p></div>
-        <div class="servico"><div class="icone">📝</div>
-          <h3><span data-pt>Formulários e painéis</span><span data-en>Forms & dashboards</span></h3>
-          <p><span data-pt>Formulários que validam os dados e salvam tudo numa planilha, com painel para consultar.</span><span data-en>Forms that validate input and save to a spreadsheet, with a dashboard to browse it.</span></p></div>
-        <div class="servico"><div class="icone">📊</div>
-          <h3><span data-pt>Automação de Excel</span><span data-en>Excel automation</span></h3>
-          <p><span data-pt>Relatórios, gráficos e limpeza de dados em um clique, no lugar de horas de copiar e colar.</span><span data-en>Reports, charts and data cleaning in one click instead of hours of copy-paste.</span></p></div>
+        <div class="servico"><div class="icone">🧮</div>
+          <h3><span data-pt>Otimização e escalas</span><span data-en>Optimization & scheduling</span></h3>
+          <p><span data-pt>Escalas de turnos, alocação e planejamento com regras reais, resolvidos por um otimizador.</span><span data-en>Shift rotas, allocation and planning with real-world rules, solved by an optimizer.</span></p></div>
+        <div class="servico"><div class="icone">💳</div>
+          <h3><span data-pt>Pagamentos e integrações</span><span data-en>Payments & integrations</span></h3>
+          <p><span data-pt>Webhooks do Stripe, assinaturas e APIs de terceiros, feitos para não perder nem duplicar eventos.</span><span data-en>Stripe webhooks, subscriptions and third-party APIs, built to never lose or double-count events.</span></p></div>
         <div class="servico"><div class="icone">📄</div>
           <h3><span data-pt>Extração de PDF</span><span data-en>PDF extraction</span></h3>
           <p><span data-pt>Lê notas, recibos e formulários em PDF e organiza os dados numa planilha.</span><span data-en>Reads invoices, receipts and forms in PDF and organizes the data in a spreadsheet.</span></p></div>
@@ -154,6 +154,38 @@
         </div>
       </article>
 
+      <article class="projeto destaque">
+        <img src="projeto8-escala-turnos/imagens/escala-video.jpg" alt="Escala semanal gerada pelo otimizador" loading="lazy">
+        <div>
+          <h3><span data-pt>Escala de turnos com otimizador</span><span data-en>Shift Scheduler (optimization solver)</span></h3>
+          <p><span data-pt>Monta a escala semanal de uma equipe respeitando todas as regras e distribuindo o trabalho com justiça. Se o pedido é impossível, explica o motivo em vez de falhar.</span><span data-en>Builds a team's weekly rota that follows every rule and spreads the work fairly. If the request is impossible, it explains why instead of failing.</span></p>
+          <ul>
+            <li><span data-pt>Regras obrigatórias garantidas: cobertura exata, disponibilidade, descanso entre turnos</span><span data-en>Hard rules guaranteed: exact coverage, availability, rest between shifts</span></li>
+            <li><span data-pt>Google OR-Tools (CP-SAT) + interface Streamlit, 13 testes automáticos</span><span data-en>Google OR-Tools (CP-SAT) + Streamlit UI, 13 automated tests</span></li>
+          </ul>
+          <div class="tags"><span>Python</span><span>OR-Tools</span><span>Streamlit</span></div>
+          <a href="projeto8-escala-turnos/video/shift-scheduler-demo-web.mp4"><span data-pt>Assistir ao vídeo →</span><span data-en>Watch the demo video →</span></a>
+          &nbsp;·&nbsp;
+          <a href="https://github.com/Fe262/python-automation-portfolio/tree/main/projeto8-escala-turnos"><span data-pt>Ver código →</span><span data-en>See code →</span></a>
+        </div>
+      </article>
+
+      <article class="projeto destaque">
+        <img src="projeto9-cobranca-stripe/imagens/webhooks.jpg" alt="Backend de cobrança processando eventos do Stripe" loading="lazy">
+        <div>
+          <h3><span data-pt>Backend de assinaturas (webhooks do Stripe)</span><span data-en>Subscription Billing Backend (Stripe webhooks)</span></h3>
+          <p><span data-pt>Recebe os eventos de cobrança e responde uma pergunta: este cliente tem acesso agora? Trata o que costuma dar errado: eventos duplicados, forjados, repetidos e fora de ordem.</span><span data-en>Receives billing events and answers one question: does this customer have access right now? Handles what usually goes wrong: duplicated, forged, replayed and out-of-order events.</span></p>
+          <ul>
+            <li><span data-pt>Assinatura HMAC verificada, idempotência e período de tolerância para pagamento falho</span><span data-en>HMAC signature check, idempotency and a grace period for failed payments</span></li>
+            <li><span data-pt>Flask + SQLite, 18 testes automáticos (ainda não testado contra o Stripe real)</span><span data-en>Flask + SQLite, 18 automated tests (not yet run against live Stripe)</span></li>
+          </ul>
+          <div class="tags"><span>Python</span><span>Flask</span><span>Stripe</span><span>SQLite</span></div>
+          <a href="projeto9-cobranca-stripe/video/billing-backend-demo-web.mp4"><span data-pt>Assistir ao vídeo →</span><span data-en>Watch the demo video →</span></a>
+          &nbsp;·&nbsp;
+          <a href="https://github.com/Fe262/python-automation-portfolio/tree/main/projeto9-cobranca-stripe"><span data-pt>Ver código →</span><span data-en>See code →</span></a>
+        </div>
+      </article>
+
       <article class="projeto">
         <img src="projeto6-conciliacao/imagens/app.jpg" alt="App de conciliação de planilhas" loading="lazy">
         <div>
@@ -175,26 +207,6 @@
           <p><span data-pt>Site de página única para médicos, dentistas e clínicas: currículo, áreas de atendimento, mapa e botão de WhatsApp sempre visível. Rápido, funciona no celular e é preparado para o Google.</span><span data-en>One-page site for doctors, dentists and clinics: résumé, services, map and an always-visible WhatsApp button. Fast, mobile-first and Google-ready.</span></p>
           <div class="tags"><span>HTML</span><span>CSS</span><span>SEO</span><span>Schema.org</span></div>
           <a href="demos/site-medico/"><span data-pt>Abrir demonstração ao vivo →</span><span data-en>Open live demo →</span></a>
-        </div>
-      </article>
-
-      <article class="projeto">
-        <img src="projeto3-formulario/imagens/painel.jpg" alt="Painel de pedidos de orçamento" loading="lazy">
-        <div>
-          <h3><span data-pt>Formulário de orçamento → Excel</span><span data-en>Quote Request Form → Excel</span></h3>
-          <p><span data-pt>Formulário web que confere os dados do cliente, salva cada pedido numa planilha e mostra um painel com filtro e download.</span><span data-en>Web form that validates customer data, saves each request to a spreadsheet and shows a dashboard with filters and download.</span></p>
-          <div class="tags"><span>Python</span><span>Streamlit</span><span>pandas</span></div>
-          <a href="https://github.com/Fe262/python-automation-portfolio/tree/main/projeto3-formulario"><span data-pt>Ver código e detalhes →</span><span data-en>See code and details →</span></a>
-        </div>
-      </article>
-
-      <article class="projeto">
-        <img src="projeto1-relatorio-planilha/imagens/grafico_mensal.png" alt="Gráfico de faturamento mensal" loading="lazy">
-        <div>
-          <h3><span data-pt>Relatório automático de vendas</span><span data-en>Automatic Sales Report</span></h3>
-          <p><span data-pt>Transforma uma planilha de vendas bruta num relatório formatado, com totais por mês, produto e vendedor e um gráfico, em um comando.</span><span data-en>Turns a raw sales sheet into a formatted report with totals by month, product and salesperson plus a chart, in one command.</span></p>
-          <div class="tags"><span>Python</span><span>pandas</span><span>openpyxl</span><span>matplotlib</span></div>
-          <a href="https://github.com/Fe262/python-automation-portfolio/tree/main/projeto1-relatorio-planilha"><span data-pt>Ver código e detalhes →</span><span data-en>See code and details →</span></a>
         </div>
       </article>
 

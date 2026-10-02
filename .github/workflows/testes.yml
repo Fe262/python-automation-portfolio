@@ -18,7 +18,7 @@ jobs:
           python-version: "3.12"
 
       - name: Instalar bibliotecas
-        run: pip install flask python-dotenv pytest pandas openpyxl matplotlib pdfplumber fpdf2
+        run: pip install flask python-dotenv pytest pandas openpyxl matplotlib pdfplumber fpdf2 ortools streamlit
 
       - name: Projeto 4 - testes do app de agendamento
         working-directory: projeto4-agendamento
@@ -28,12 +28,13 @@ jobs:
         working-directory: projeto6-conciliacao
         run: python -m pytest -v
 
-      - name: Projeto 1 - gera o relatorio com os dados de exemplo
-        working-directory: projeto1-relatorio-planilha
-        run: |
-          python gerar_dados_exemplo.py
-          python relatorio.py vendas_exemplo.xlsx
-          test -f saida/relatorio_vendas.xlsx
+      - name: Projeto 8 - testes da escala de turnos (solver + app)
+        working-directory: projeto8-escala-turnos
+        run: python -m pytest -v
+
+      - name: Projeto 9 - testes da cobranca por assinatura
+        working-directory: projeto9-cobranca-stripe
+        run: python -m pytest -v
 
       - name: Projeto 2 - extrai os dados dos PDFs de exemplo
         working-directory: projeto2-extrator-pdf

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Billing backend - live demo stage</title>
+<style>
+  :root{--bg:#0a0f1c;--panel:#111a2e;--line:#22304d;--text:#e8eefb;--mute:#8fa3c7;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;--blue:#4da3ff}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:17px/1.4 'Segoe UI',system-ui,sans-serif;height:100vh;overflow:hidden;
+       display:grid;grid-template-rows:56px 1fr 138px;gap:12px;padding:14px 18px}
+  header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:10px}
+  header b{font-size:22px;letter-spacing:.2px}
+  header span{color:var(--mute);font-size:14px}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ok);margin-right:8px;box-shadow:0 0 10px var(--ok)}
+  main{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;min-height:0}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-height:0;display:flex;flex-direction:column}
+  h2{margin:0 0 10px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--mute);font-weight:600}
+  #feed{overflow:hidden;display:flex;flex-direction:column;gap:8px;justify-content:flex-end;flex:1}
+  .ev{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:9px 12px;border-radius:10px;background:#0d1627;border:1px solid var(--line);
+      animation:in .35s ease both}
+  @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .ev .t{font-weight:600;font-size:18px}
+  .ev .m{grid-column:1;color:var(--mute);font-size:14px;font-family:Consolas,monospace}
+  .chip{grid-row:1/3;grid-column:2;align-self:center;padding:4px 11px;border-radius:99px;font-size:15px;font-weight:700;font-family:Consolas,monospace}
+  .ok{background:rgba(52,211,153,.14);color:var(--ok)}.warn{background:rgba(251,191,36,.14);color:var(--warn)}.bad{background:rgba(248,113,113,.14);color:var(--bad)}
+  #access{display:flex;flex-direction:column;gap:14px;flex:1}
+  #badge{border-radius:14px;padding:18px 20px;text-align:center;border:1px solid var(--line);background:#0d1627;transition:all .4s}
+  #badge small{display:block;color:var(--mute);font-size:12px;letter-spacing:2px;text-transform:uppercase}
+  #badge strong{display:block;font-size:50px;line-height:1.15;margin-top:4px}
+  #badge.yes{border-color:rgba(52,211,153,.5);background:rgba(52,211,153,.08)}#badge.yes strong{color:var(--ok)}
+  #badge.no{border-color:rgba(248,113,113,.5);background:rgba(248,113,113,.08)}#badge.no strong{color:var(--bad)}
+  #badge.none strong{color:var(--mute)}
+  dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:9px 16px;font-size:17px}
+  dt{color:var(--mute)}dd{margin:0;font-family:Consolas,monospace}
+  #reason{margin-top:auto;padding:10px 12px;border-radius:10px;background:#0d1627;border:1px dashed var(--line);color:#c9d6f0;font-size:16px}
+  footer{background:#060a14;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font:14.5px/1.45 Consolas,monospace;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  footer h3{margin:0 0 4px;font:600 11px 'Segoe UI';letter-spacing:2px;color:var(--mute);text-transform:uppercase}
+  footer pre{margin:0;white-space:pre-wrap;word-break:break-all;color:#b7c7e6}
+  .k{color:#7fc0ff}.s{color:#9be0b4}
+</style></head>
+<body>
+<header><b><span class="dot"></span>Subscription billing backend</b><span id="host">live · real server · SQLite</span></header>
+<main>
+  <section class="panel"><h2>Stripe events arriving</h2><div id="feed"></div></section>
+  <section class="panel"><h2>What your app is told</h2>
+    <div id="access">
+      <div id="badge" class="none"><small>Does the customer have access?</small><strong>-</strong></div>
+      <dl id="facts"></dl>
+      <div id="reason">Waiting for the first event...</div>
+    </div></section>
+</main>
+<footer>
+  <div><h3>Request to POST /webhooks/stripe</h3><pre id="req">-</pre></div>
+  <div><h3>Response</h3><pre id="res">-</pre></div>
+</footer>
+<script>
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+window.setHost = h => document.getElementById('host').textContent = h;
+window.pushEvent = e => {                 // {title, meta, chip, tone}
+  const feed = document.getElementById('feed');
+  const d = document.createElement('div'); d.className = 'ev';
+  d.innerHTML = `<div class="t">${esc(e.title)}</div><div class="m">${esc(e.meta)}</div><span class="chip ${e.tone}">${esc(e.chip)}</span>`;
+  feed.appendChild(d);
+  while (feed.children.length > 5) feed.removeChild(feed.firstChild);
+};
+window.clearFeed = () => { document.getElementById('feed').innerHTML = ''; };
+window.setReq = (req, res) => {
+  document.getElementById('req').innerHTML = req;
+  document.getElementById('res').innerHTML = res;
+};
+window.setAccess = a => {                 // {has_access, status, plan, customer, period_end, failed, reason}
+  const b = document.getElementById('badge');
+  b.className = a.has_access === null ? 'none' : (a.has_access ? 'yes' : 'no');
+  b.querySelector('strong').textContent = a.has_access === null ? '-' : (a.has_access ? 'ACCESS' : 'NO ACCESS');
+  const rows = [['customer', a.customer], ['status', a.status], ['plan', a.plan], ['period ends', a.period_end], ['failed payments', a.failed]];
+  document.getElementById('facts').innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v ?? '-')}</dd>`).join('');
+  document.getElementById('reason').textContent = a.reason || '';
+};
+</script>
+</body></html>
